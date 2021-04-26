@@ -1,0 +1,97 @@
+grasp_mapper:
+  # 这个参数用于缩放夹爪到最后的tensor上
+  # max_width_px_in_tensor: 13
+  # min_width_px_in_tensor: 12
+  max_width_px_in_tensor: 21
+  min_width_px_in_tensor: 22
+  final_width: 32
+  final_height: 32
+
+policy:
+  num_seed_samples: 200
+  num_gmm_samples: 50
+  num_iters: 3
+  gmm_refit_p: 0.35
+  gmm_component_frac: 0.4
+  gmm_reg_covar: 0.01
+  
+sampler:
+  max_grasp_width_px: 45
+  friction_coef: 0.5
+  depth_grad_thresh: 0.05
+  min_grasp_dist: 0.025
+  angle_dist_weight: 0.025
+  min_depth_offset: 0.010
+  max_depth_offset: 0.015
+  depth_sample_win_height: 1
+  depth_sample_win_width: 1
+  depth_samples_per_grasp: 2
+
+### GQCNN CONFIG ###
+gqcnn_config:
+  # basic data metrics
+  im_height: 32
+  im_width: 32
+  im_channels: 1
+
+  # 是否使用原始的gqcnn模型
+  use_raw: 0
+
+  model_path: /root/Project/gmdata/gq-data/models/mix-dir-20x100
+  # model_path: /home/lai/Project/model_jvywhaoztm
+  # needs to match input data mode that was used for training, determines the pose dimensions for the network
+  pose_dim: 1
+
+  # prediction batch size, in training this will be overriden by the val_batch_size in the DeepOptimizer's config file
+  batch_size: 16
+
+  # architecture
+  architecture:
+    conv1_1:
+      filt_dim: 7
+      num_filt: 64
+      pool_size: 1
+      pool_stride: 1  
+      norm: 0
+      norm_type: local_response
+    conv1_2:
+      filt_dim: 5
+      num_filt: 64
+      pool_size: 2
+      pool_stride: 2
+      norm: 1
+      norm_type: local_response
+    conv2_1:
+      filt_dim: 3
+      num_filt: 64
+      pool_size: 1
+      pool_stride: 1  
+      norm: 0
+      norm_type: local_response
+    conv2_2:
+      filt_dim: 3
+      num_filt: 64
+      pool_size: 1
+      pool_stride: 1
+      norm: 1
+      norm_type: local_response
+    pc1:
+      out_size: 16
+    # pc2:
+    #   out_size: 0
+    fc3:
+      out_size: 1024
+      drop_out: 0
+      drop_rate: 0
+    fc4:
+      out_size: 1024  
+      drop_out: 0
+      drop_rate: 0 
+    fc5:
+      out_size: 2
+
+  # architecture normalization constants
+  radius: 2
+  alpha: 2.0e-05
+  beta: 0.75
+  bias: 1.0

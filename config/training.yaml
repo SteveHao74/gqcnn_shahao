@@ -1,0 +1,98 @@
+training:
+  data_path: path/to/tfrecords_data
+  model_file: path/to/model
+  out_path: path/to/out
+  summary_dir: path/to/summary
+  restore: 1
+  summary_step: 100
+  im_height: 32
+  im_width: 32
+  im_channels: 1
+  pose_len: 1
+
+  dataset_buffer_size: 10000
+  train_batch_size: 64
+  val_batch_size: 64
+
+  base_lr: 0.015
+  decay_step_multiplier: .2   # number of times to go through training datapoints before stepping down decay rate
+  decay_rate: 0.95
+  metric_thresh: 0.002
+  train_drop_out: 0
+  train_l2_regularizer: 0.0005
+  optimizer: momentum
+  momentum_rate: 0.9
+
+  fine_tune: 0
+  update_fc_only: 1
+  update_conv0_only: 0
+  reinit_fc3: 0
+  reinit_fc4: 0
+  reinit_fc5: 0
+
+### GQCNN CONFIG ###
+gqcnn_config:
+  # basic data metrics
+  im_height: 32
+  im_width: 32
+  im_channels: 1
+
+  use_raw: 0
+
+  model_path: C:/Users/13111/Documents/Robot/test/gqcnn-test/GQ-Image-Wise
+  # needs to match input data mode that was used for training, determines the pose dimensions for the network
+  pose_dim: 1
+
+  # prediction batch size, in training this will be overriden by the val_batch_size in the DeepOptimizer's config file
+  batch_size: 16
+
+  # architecture
+  architecture:
+    conv1_1:
+      filt_dim: 7
+      num_filt: 64
+      pool_size: 1
+      pool_stride: 1  
+      norm: 0
+      norm_type: local_response
+    conv1_2:
+      filt_dim: 5
+      num_filt: 64
+      pool_size: 2
+      pool_stride: 2
+      norm: 1
+      norm_type: local_response
+    conv2_1:
+      filt_dim: 3
+      num_filt: 64
+      pool_size: 1
+      pool_stride: 1  
+      norm: 0
+      norm_type: local_response
+    conv2_2:
+      filt_dim: 3
+      num_filt: 64
+      pool_size: 1
+      pool_stride: 1
+      norm: 1
+      norm_type: local_response
+    pc1:
+      out_size: 16
+    # pc2:
+    #   out_size: 0
+    fc3:
+      out_size: 1024
+      drop_out: 0
+      drop_rate: 0
+    fc4:
+      out_size: 1024  
+      drop_out: 0
+      drop_rate: 0 
+    fc5:
+      out_size: 2
+
+  # architecture normalization constants
+  radius: 2
+  alpha: 2.0e-05
+  beta: 0.75
+  bias: 1.0
